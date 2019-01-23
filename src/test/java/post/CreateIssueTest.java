@@ -1,83 +1,35 @@
 package post;
 
-import io.restassured.RestAssured;
-import io.restassured.path.json.JsonPath;
+import RestAssuredCore.BaseAssertion;
+import RestAssuredCore.BaseTest;
+import RestAssuredCore.RESTCalls;
 import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
-import org.junit.Test;
-import org.testng.Assert;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+import org.testng.annotations.Test;
+import utils.PayloadGenerator;
+import utils.URL;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+
 
 public class CreateIssueTest {
 
-
-        public  String getSessionId() throws IOException {
-
+    private static Logger log = LogManager.getLogger(CreateIssueTest.class.getName());
 
 
-            String uri = "http://localhost:8080/rest/auth/1/session";
-           // String filePath = "/Users/jahidul/IdeaProjects/RestAssuredFramwork/resources/JiraLogin.json";
-            // This will convert the .json payload to Strign
-            String payLoad = new String(Files.readAllBytes(Paths.get(System.getProperty("user.dir")+"/resources/JiraLogin.json")));
-            //response = RESTCalls.POSTRequest(endPointURI, loginPayload);
-            RequestSpecification requestSpecification = RestAssured.given().body(payLoad);
-            requestSpecification.contentType("application/json");
-            // Make send call
-            Response response = requestSpecification.post(uri);
+    @Test
+    public void createIssue(){
 
-            String strResponse = response.getBody().asString();
-
-            JsonPath jsonResponse = new JsonPath(strResponse);
-
-            System.out.println(jsonResponse);
-
-            String sessionId = jsonResponse.getString("session.value");
-
-            return sessionId;
-
-        }
-
-        @Test
-    public  void createIssue() throws IOException {
-
-            String sessionId =  getSessionId();
-
-            String payloadPath = "/Users/jahidul/IdeaProjects/RestAssuredFramwork/resources/CreateBug.json";
-
-            String issuePayload = new String(Files.readAllBytes(Paths.get(payloadPath)));
-
-            RequestSpecification requestSpecification =RestAssured.given().body(issuePayload);
+     String sessionId = BaseTest.doLogin();
+     String payLoad = PayloadGenerator.generatePayLoadString("CreateBug.json");
+     String uri = URL.getEndPoint("/rest/api/2/issue/");
+     Response response = RESTCalls.POSTRequest(uri,payLoad, sessionId);
+     // BaseAssertion.verifyResonseBodyByJsonPath(response,"key", "REST-41");
+        BaseAssertion.verifyResponseHeader(response,"Content-Type" ,"application/json;charset=UTF-8");
+        BaseAssertion.verifyStatusCode(response,201);
 
 
-            // passing session id in header
-           requestSpecification.header("cookie", "JSESSIONID=" + sessionId+"");
-
-           // passing ContentType in header
-            requestSpecification.contentType("application/json");
-
-            // creat POST call
-            Response  response = requestSpecification.post("http://localhost:8080/rest/api/2/issue/");
-
-            // convert response body to string
-            String stringResponse = response.body().asString();
-
-            // create jsonpath reference variable by stringResponse
-            JsonPath jsonResponse = new JsonPath(stringResponse);
-
-            // Get value of key from jsonResponse
-           String actualIssueKey = jsonResponse.getString("key");
-
-
-            System.out.println(actualIssueKey);
-
-            Assert.assertEquals(actualIssueKey, "REST-30");
-
-
-
-        }
+    }
 
 
 }

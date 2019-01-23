@@ -7,43 +7,46 @@
     <groupId>com.api.testing</groupId>
     <artifactId>RestAssuredFramwork</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <name>RestAssuredFramework</name>
+    <url>http://maven.apache.org</url>
+
 
 <dependencies>
     <dependency>
         <groupId>io.rest-assured</groupId>
         <artifactId>rest-assured</artifactId>
-        <version>3.1.1</version>
+        <version>3.0.0</version>
         <scope>compile</scope>
     </dependency>
-    <dependency>
+    <!--<dependency>
         <groupId>io.rest-assured</groupId>
         <artifactId>rest-assured</artifactId>
-        <version>3.0.6</version>
+        <version>3.0.0</version>
         <scope>test</scope>
-    </dependency>
+    </dependency>-->
     <dependency>
         <groupId>io.rest-assured</groupId>
         <artifactId>json-path</artifactId>
-        <version>3.0.6</version>
+        <version>3.0.0</version>
     </dependency>
 
     <dependency>
         <groupId>io.rest-assured</groupId>
         <artifactId>xml-path</artifactId>
-        <version>3.0.6</version>
+        <version>3.0.0</version>
     </dependency>
 
     <dependency>
         <groupId>io.rest-assured</groupId>
         <artifactId>json-schema-validator</artifactId>
-        <version>3.0.6</version>
+        <version>3.0.0</version>
         <scope>test</scope>
     </dependency>
     <!-- https://mvnrepository.com/artifact/org.testng/testng -->
     <dependency>
         <groupId>org.testng</groupId>
         <artifactId>testng</artifactId>
-        <version>6.11</version>
+        <version>6.9.10</version>
         <scope>test</scope>
     </dependency>
     <dependency>
@@ -85,7 +88,7 @@
                     <version>2.20.1</version>
                     <configuration>
                         <suiteXmlFiles>
-                            <suiteXmlFile>testng.xml</suiteXmlFile>
+                            <suiteXmlFile>target/test-classes/REST_API_Test_Runner.xml</suiteXmlFile>
                         </suiteXmlFiles>
                         <includes>
                             <include>**/runner.AllApiTest.class</include>
